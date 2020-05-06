@@ -1,5 +1,7 @@
 package com.jali.tank;
 
+import com.jali.tank.abstractfactory.BaseTank;
+
 import java.awt.*;
 import java.util.Random;
 
@@ -7,18 +9,16 @@ import java.util.Random;
  * @author lijiang
  * @create 2020-04-20 22:31
  */
-public class Tank {
+public class Tank extends BaseTank {
 
-    public Rectangle tankRectangle;
     int x;
     int y;
     private boolean living = true;
-    Dir dir;
+    Dir dir = Dir.DOWN;
     public static final int SPEED = 5;
     boolean moving = true;
     TankFrame tankFrame;
     private Random random = new Random();
-    Group group;
     FireStrategy fireStrategy;
 
     public static final int WIDTH = ResourceManager.goodTankU.getWidth();
@@ -30,12 +30,22 @@ public class Tank {
         this.dir = dir;
         this.group = group;
         this.tankFrame = tankFrame;
+
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = WIDTH;
+        rect.height =HEIGHT;
         // 坦克的长方形
-        tankRectangle = new Rectangle(x, y ,WIDTH, HEIGHT);
-        if(group==Group.BAD){
-            fireStrategy = new DefaultFireStrategy();
+        if(group==Group.GOOD){
+            String goodFSName = (String)PropertyManager.get("goodFS");
+
+            try {
+                fireStrategy = (FireStrategy)Class.forName(goodFSName).getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }else{
-            fireStrategy = new FourDirFireStrategy();
+            fireStrategy = new DefaultFireStrategy();
         }
     }
 
@@ -90,8 +100,8 @@ public class Tank {
         }
         boundsCheck();
 
-        tankRectangle.x = x;
-        tankRectangle.y = y;
+        rect.x = x;
+        rect.y = y;
     }
 
     /**
@@ -137,7 +147,13 @@ public class Tank {
     }
 
     public void fire() {
-        fireStrategy.fire(this);
+//        fireStrategy.fire(this);
+        int bX = this.x + Tank.WIDTH/2 - Bullet.WIDTH/2;
+        int bY = this.y + Tank.HEIGHT/2 - Bullet.HEIGHT/2;
+        Dir[] dirs = Dir.values();
+        for(Dir dir : dirs){
+            tankFrame.gf.createBullet(bX,bY,dir,group,tankFrame);
+        }
     }
 
     public int getX() {

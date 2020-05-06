@@ -1,2 +1,4 @@
 #tanks size initialization
 initTankCount=10
+goodFS=com.jali.tank.FourDirFireStrategy
+badFS=com.jali.tank.DefaultFireStrategy

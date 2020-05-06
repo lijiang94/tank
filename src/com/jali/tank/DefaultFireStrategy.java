@@ -1,6 +1,7 @@
 package com.jali.tank;
 
 /**
+ * 默认的开火策略
  * @author lijiang
  * @create 2020-04-27 9:11
  */

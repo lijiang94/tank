@@ -12,27 +12,30 @@ public class Main {
         int initTankCount = Integer.parseInt(PropertyManager.get("initTankCount"));
 
         for (int i = 0; i < initTankCount; i++) {
-            tankFrame.tanks.add(new Tank(200 + i * 120,50,Dir.DOWN, Group.BAD ,tankFrame));
+//            tankFrame.tanks.add(new Tank(200 + i * 120,50,Dir.DOWN, Group.BAD ,tankFrame));
+            // 使用工厂创建坦克
+            tankFrame.tanks.add(tankFrame.gf.createTank(200 + i * 120,50,Dir.DOWN, Group.BAD ,tankFrame));
         }
-        new Thread(()->{
-            while(true){
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if(tankFrame.tanks.size()<=0){
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    for (int i = 0; i < 5; i++) {
-                        tankFrame.tanks.add(new Tank(200 + i * 120,50,Dir.DOWN, Group.BAD ,tankFrame));
-                    }
-                }
-            }
-        }).start();
+        // 当坦克都打死了，再出现五辆坦克
+//        new Thread(()->{
+//            while(true){
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                if(tankFrame.tanks.size()<=0){
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    for (int i = 0; i < 5; i++) {
+//                        tankFrame.tanks.add(new Tank(200 + i * 120,50,Dir.DOWN, Group.BAD ,tankFrame));
+//                    }
+//                }
+//            }
+//        }).start();
 
         while(true){
             Thread.sleep(50);

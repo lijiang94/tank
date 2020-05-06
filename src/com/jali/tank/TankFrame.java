@@ -1,5 +1,12 @@
 package com.jali.tank;
 
+import com.jali.tank.abstractfactory.BaseBullet;
+import com.jali.tank.abstractfactory.BaseExplode;
+import com.jali.tank.abstractfactory.BaseTank;
+import com.jali.tank.abstractfactory.factory.DefaultFactory;
+import com.jali.tank.abstractfactory.factory.GameFactory;
+import com.jali.tank.abstractfactory.factory.RectFactory;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -15,9 +22,12 @@ import java.util.List;
 public class TankFrame extends Frame {
 
     Tank myTank = new Tank(250,400,Dir.UP, Group.GOOD, this);
-    List<Bullet> bullets = new ArrayList<>();
-    List<Tank> tanks = new ArrayList<>();
-    List<Explode> explodes = new ArrayList<>();
+    public List<BaseBullet> bullets = new ArrayList<>();
+    public List<BaseTank> tanks = new ArrayList<>();
+    public List<BaseExplode> explodes = new ArrayList<>();
+
+    public GameFactory gf = new DefaultFactory();
+//    public GameFactory gf = new RectFactory();
 
     public static final int GAME_WIDTH = 800,GAME_HEIGHT = 600;
 
@@ -79,8 +89,6 @@ public class TankFrame extends Frame {
                 bullets.get(i).collideWith(tanks.get(j));
             }
         }
-//        x += 10;
-        //y += 10;
     }
 
     class MyKeyListenner extends KeyAdapter{
