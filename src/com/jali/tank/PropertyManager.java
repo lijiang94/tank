@@ -19,7 +19,7 @@ public class PropertyManager {
         }
     }
 
-    public static String get(String key){
+    static String get(String key){
         return properties.getProperty(key);
     }
 

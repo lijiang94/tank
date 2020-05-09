@@ -1,6 +1,8 @@
 package com.jali.tank;
 
-import com.jali.tank.abstractfactory.BaseTank;
+import com.jali.tank.strategy.DefaultFireStrategy;
+import com.jali.tank.strategy.FireStrategy;
+import com.jali.tank.strategy.FourDirFireStrategy;
 
 import java.awt.*;
 import java.util.Random;
@@ -9,50 +11,42 @@ import java.util.Random;
  * @author lijiang
  * @create 2020-04-20 22:31
  */
-public class Tank extends BaseTank {
+public class Tank {
 
-    int x;
-    int y;
+    public Rectangle tankRectangle;
+    public int x;
+    public int y;
     private boolean living = true;
-    Dir dir = Dir.DOWN;
+    public Dir dir;
     public static final int SPEED = 5;
     boolean moving = true;
-    TankFrame tankFrame;
+    public GameModel gameModel;
     private Random random = new Random();
+    public Group group;
     FireStrategy fireStrategy;
 
     public static final int WIDTH = ResourceManager.goodTankU.getWidth();
     public static final int HEIGHT = ResourceManager.goodTankU.getHeight();
 
-    public Tank(int x, int y, Dir dir, Group group, TankFrame tankFrame) {
+    public Tank(int x, int y, Dir dir, Group group, GameModel gameModel) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.tankFrame = tankFrame;
-
-        rect.x = this.x;
-        rect.y = this.y;
-        rect.width = WIDTH;
-        rect.height =HEIGHT;
+        this.gameModel = gameModel;
         // 坦克的长方形
-        if(group==Group.GOOD){
-            String goodFSName = (String)PropertyManager.get("goodFS");
-
-            try {
-                fireStrategy = (FireStrategy)Class.forName(goodFSName).getDeclaredConstructor().newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }else{
+        tankRectangle = new Rectangle(x, y ,WIDTH, HEIGHT);
+        if(group==Group.BAD){
             fireStrategy = new DefaultFireStrategy();
+        }else{
+            fireStrategy = new FourDirFireStrategy();
         }
     }
 
 
     public void paint(Graphics g) {
         if(!this.living){
-            tankFrame.tanks.remove(this);
+            gameModel.tanks.remove(this);
             return;
         }
 
@@ -100,8 +94,8 @@ public class Tank extends BaseTank {
         }
         boundsCheck();
 
-        rect.x = x;
-        rect.y = y;
+        tankRectangle.x = x;
+        tankRectangle.y = y;
     }
 
     /**
@@ -147,13 +141,7 @@ public class Tank extends BaseTank {
     }
 
     public void fire() {
-//        fireStrategy.fire(this);
-        int bX = this.x + Tank.WIDTH/2 - Bullet.WIDTH/2;
-        int bY = this.y + Tank.HEIGHT/2 - Bullet.HEIGHT/2;
-        Dir[] dirs = Dir.values();
-        for(Dir dir : dirs){
-            tankFrame.gf.createBullet(bX,bY,dir,group,tankFrame);
-        }
+        fireStrategy.fire(this);
     }
 
     public int getX() {

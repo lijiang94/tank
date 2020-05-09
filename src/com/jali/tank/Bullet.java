@@ -1,46 +1,37 @@
 package com.jali.tank;
 
-import com.jali.tank.abstractfactory.BaseBullet;
-import com.jali.tank.abstractfactory.BaseTank;
-
 import java.awt.*;
 
 /**
  * @author lijiang
  * @create 2020-04-20 23:18
  */
-public class Bullet extends BaseBullet {
+public class Bullet {
 
     private static final int SPEED = 10;
     public static final int WIDTH = ResourceManager.bulletD.getWidth(), HEIGHT = ResourceManager.bulletD.getHeight();
     private boolean living = true;
-    private TankFrame tankFrame;
+    private GameModel gameModel;
 
     // 子弹的长方形
-    Rectangle rect = new Rectangle();
+    Rectangle bulletRectangle;
 
     private int x,y;
     private Dir dir;
     private Group group;
 
-    public Bullet(int x, int y, Dir dir, Group group, TankFrame tankFrame) {
+    public Bullet(int x, int y, Dir dir, Group group, GameModel gameModel) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.tankFrame = tankFrame;
-//        bulletRectangle = new Rectangle(this.x, this.y ,WIDTH, HEIGHT);
-        rect.x = this.x;
-        rect.y = this.y;
-        rect.width = WIDTH;
-        rect.height = HEIGHT;
-
-        tankFrame.bullets.add(this);
+        this.gameModel = gameModel;
+        bulletRectangle = new Rectangle(this.x, this.y ,WIDTH, HEIGHT);
     }
 
     public void paint(Graphics g) {
         if(!this.living){
-            tankFrame.bullets.remove(this);
+            gameModel.bullets.remove(this);
             return;
         }
 
@@ -58,6 +49,11 @@ public class Bullet extends BaseBullet {
                 g.drawImage(ResourceManager.bulletD,x,y,null);
                 break;
         }
+        // 改成图片
+//        Color color = g.getColor();
+//        g.setColor(Color.RED);
+//        g.fillOval(x,y,WIDTH,HEIGHT);
+//        g.setColor(color);
         move();
     }
 
@@ -79,20 +75,20 @@ public class Bullet extends BaseBullet {
         if(x < 0 || y <0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT){
             this.living = false;
         }
-        rect.x = x;
-        rect.y = y;
+        bulletRectangle.x = x;
+        bulletRectangle.y = y;
     }
 
-    public void collideWith(BaseTank tank) {
+    public void collideWith(Tank tank) {
         if(this.group == tank.getGroup()) return;
 
         // 如果两个长方形相交，说明子弹打中了
-        if(rect.intersects(tank.rect)){
+        if(bulletRectangle.intersects(tank.tankRectangle)){
             this.die();
             tank.die();
             int eX = tank.getX() + Tank.WIDTH/2 - Explode.WIDTH/2;
             int eY = tank.getY() + Tank.HEIGHT/2 - Explode.HEIGHT/2;
-            tankFrame.explodes.add(tankFrame.gf.createExplode(eX, eY, tankFrame));
+            gameModel.explodes.add(new Explode(eX,eY,gameModel));
         }
     }
 
