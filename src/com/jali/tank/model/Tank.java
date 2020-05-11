@@ -1,5 +1,6 @@
-package com.jali.tank;
+package com.jali.tank.model;
 
+import com.jali.tank.*;
 import com.jali.tank.strategy.DefaultFireStrategy;
 import com.jali.tank.strategy.FireStrategy;
 import com.jali.tank.strategy.FourDirFireStrategy;
@@ -11,14 +12,12 @@ import java.util.Random;
  * @author lijiang
  * @create 2020-04-20 22:31
  */
-public class Tank {
+public class Tank extends GameObject{
 
-    public Rectangle tankRectangle;
-    public int x;
-    public int y;
+    Rectangle tankRectangle;
     private boolean living = true;
     public Dir dir;
-    public static final int SPEED = 5;
+    public static final int SPEED = 3;
     boolean moving = true;
     public GameModel gameModel;
     private Random random = new Random();
@@ -43,10 +42,10 @@ public class Tank {
         }
     }
 
-
+    @Override
     public void paint(Graphics g) {
         if(!this.living){
-            gameModel.tanks.remove(this);
+            gameModel.remove(this);
             return;
         }
 
@@ -69,12 +68,14 @@ public class Tank {
     }
 
     private void move() {
-        if(this.group == Group.BAD && random.nextInt(10) > 8){
+        if(this.group == Group.BAD && random.nextInt(100) > 95){
             this.fire();
         }
         if(!moving){
             return;
         }
+        beforeX = x;
+        beforeY = y;
         switch (dir){
             case LEFT:
                 x -= SPEED;
@@ -171,4 +172,32 @@ public class Tank {
     public void setGroup(Group group) {
         this.group = group;
     }
+
+    public Rectangle getTankRectangle() {
+        return tankRectangle;
+    }
+
+    public void setTankRectangle(Rectangle tankRectangle) {
+        this.tankRectangle = tankRectangle;
+    }
+
+    public void rebound(){
+        this.x = beforeX;
+        this.y = beforeY;
+//        switch (dir){
+//            case UP:
+//                this.dir = Dir.DOWN;
+//                break;
+//            case DOWN:
+//                this.dir = Dir.DOWN;
+//                break;
+//            case LEFT:
+//                this.dir = Dir.RIGHT;
+//                break;
+//            case RIGHT:
+//                this.dir = Dir.LEFT;
+//                break;
+//        }
+    }
+
 }

@@ -6,6 +6,11 @@ package com.jali.tank;
  */
 public class Main {
 
+    /**
+     * 第八节，3    13:36
+     * @param args
+     * @throws InterruptedException
+     */
     public static void main(String[] args) throws InterruptedException {
         TankFrame tankFrame = new TankFrame();
 

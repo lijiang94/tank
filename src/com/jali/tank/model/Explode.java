@@ -1,4 +1,7 @@
-package com.jali.tank;
+package com.jali.tank.model;
+
+import com.jali.tank.GameModel;
+import com.jali.tank.ResourceManager;
 
 import java.awt.*;
 
@@ -6,12 +9,11 @@ import java.awt.*;
  * @author lijiang
  * @create 2020-04-24 0:26
  */
-public class Explode {
+public class Explode extends GameObject{
 
     public static int WIDTH = ResourceManager.explodes[0].getWidth();
     public static int HEIGHT = ResourceManager.explodes[0].getHeight();
 
-    private int x, y;
     GameModel gameModel = null;
     private int step = 0;
 
@@ -21,11 +23,12 @@ public class Explode {
         this.gameModel = gameModel;
     }
 
+    @Override
     public void paint(Graphics g) {
         g.drawImage(ResourceManager.explodes[step++],x,y,null);
         if(step >= ResourceManager.explodes.length){
             step = 0;
-            gameModel.explodes.remove(this);
+            gameModel.remove(this);
         }
     }
 

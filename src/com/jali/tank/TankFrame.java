@@ -1,5 +1,7 @@
 package com.jali.tank;
 
+import com.jali.tank.model.Tank;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

@@ -1,6 +1,6 @@
 package com.jali.tank.strategy;
 
-import com.jali.tank.Tank;
+import com.jali.tank.model.Tank;
 
 /**
  * @author lijiang

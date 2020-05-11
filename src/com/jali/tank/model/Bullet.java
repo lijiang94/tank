@@ -1,4 +1,6 @@
-package com.jali.tank;
+package com.jali.tank.model;
+
+import com.jali.tank.*;
 
 import java.awt.*;
 
@@ -6,9 +8,9 @@ import java.awt.*;
  * @author lijiang
  * @create 2020-04-20 23:18
  */
-public class Bullet {
+public class Bullet extends GameObject{
 
-    private static final int SPEED = 10;
+    private static final int SPEED = 6;
     public static final int WIDTH = ResourceManager.bulletD.getWidth(), HEIGHT = ResourceManager.bulletD.getHeight();
     private boolean living = true;
     private GameModel gameModel;
@@ -16,7 +18,6 @@ public class Bullet {
     // 子弹的长方形
     Rectangle bulletRectangle;
 
-    private int x,y;
     private Dir dir;
     private Group group;
 
@@ -29,9 +30,10 @@ public class Bullet {
         bulletRectangle = new Rectangle(this.x, this.y ,WIDTH, HEIGHT);
     }
 
+    @Override
     public void paint(Graphics g) {
         if(!this.living){
-            gameModel.bullets.remove(this);
+            gameModel.remove(this);
             return;
         }
 
@@ -88,7 +90,7 @@ public class Bullet {
             tank.die();
             int eX = tank.getX() + Tank.WIDTH/2 - Explode.WIDTH/2;
             int eY = tank.getY() + Tank.HEIGHT/2 - Explode.HEIGHT/2;
-            gameModel.explodes.add(new Explode(eX,eY,gameModel));
+            gameModel.add(new Explode(eX,eY,gameModel));
         }
     }
 

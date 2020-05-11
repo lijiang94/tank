@@ -1,5 +1,10 @@
 package com.jali.tank;
 
+import com.jali.tank.cor.BulletTankCollider;
+import com.jali.tank.cor.TankTankCollide;
+import com.jali.tank.model.GameObject;
+import com.jali.tank.model.Tank;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,51 +19,62 @@ public class GameModel {
 
     // 我方坦克
     Tank myTank = new Tank(250,400,Dir.UP, Group.GOOD, this);
-    // 子弹
-    public List<Bullet> bullets = new ArrayList<>();
-    // 敌方坦克
-    public List<Tank> tanks = new ArrayList<>();
-    // 爆炸数量
-    public List<Explode> explodes = new ArrayList<>();
+
+    List<GameObject> objects = new ArrayList<>();
+    BulletTankCollider collider = new BulletTankCollider();
+    TankTankCollide tankTankCollide = new TankTankCollide();
 
     public GameModel() {
         // 初始化敌方坦克
         int initTankCount = Integer.parseInt(PropertyManager.get("initTankCount"));
 
         for (int i = 0; i < initTankCount; i++) {
-            tanks.add(new Tank(200 + i * 120,50,Dir.DOWN, Group.BAD ,this));
+            objects.add(new Tank(i * 80,50,Dir.DOWN, Group.BAD ,this));
         }
+
+        objects.add(myTank);
+    }
+
+    /**
+     * 添加
+     * @param gameObject
+     */
+    public void add(GameObject gameObject){
+        this.objects.add(gameObject);
+    }
+
+    /**
+     * 移除
+     * @param gameObject
+     */
+    public void remove(GameObject gameObject){
+        this.objects.remove(gameObject);
     }
 
     public void paint(Graphics g){
         // 画左上角的数量
         Color color = g.getColor();
         g.setColor(Color.WHITE);
-        g.drawString("子弹的数量：" + bullets.size(),10,60);
-        g.drawString("敌人的数量：" + tanks.size(),10,80);
-        g.drawString("爆炸数量：" + explodes.size(),10,120);
         g.setColor(color);
 
         // 画我方坦克
         myTank.paint(g);
-        // 画子弹
-        for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).paint(g);
+
+        // 画去其他物体
+        for (int i = 0; i < objects.size(); i++) {
+            objects.get(i).paint(g);
         }
-        // 画敌方坦克
-        for (int i = 0; i < tanks.size(); i++) {
-            tanks.get(i).paint(g);
-        }
-        // 画爆炸
-        for (int i = 0; i < explodes.size(); i++) {
-            explodes.get(i).paint(g);
-        }
-        // 子弹碰撞
-        for (int i = 0; i < bullets.size(); i++) {
-            for (int j = 0; j < tanks.size(); j++) {
-                bullets.get(i).collideWith(tanks.get(j));
+
+        // 互相碰撞
+        for (int i = 0; i < objects.size(); i++) {
+            for (int j = i+1; j < objects.size(); j++) {
+                GameObject o1 = objects.get(i);
+                GameObject o2 = objects.get(j);
+                collider.collide(o1,o2);
+                tankTankCollide.collide(o1,o2);
             }
         }
+
     }
 
     public Tank getMyTank(){
