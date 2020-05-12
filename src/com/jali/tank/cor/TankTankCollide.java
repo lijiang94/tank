@@ -9,7 +9,7 @@ import com.jali.tank.model.Tank;
  */
 public class TankTankCollide implements Collider{
     @Override
-    public void collide(GameObject o1, GameObject o2) {
+    public boolean collide(GameObject o1, GameObject o2) {
         if(o1 instanceof Tank && o2 instanceof Tank) {
             Tank tank1 = (Tank) o1;
             Tank tank2 = (Tank) o2;
@@ -18,5 +18,6 @@ public class TankTankCollide implements Collider{
                 tank2.rebound();
             }
         }
+        return true;
     }
 }

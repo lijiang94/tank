@@ -81,8 +81,8 @@ public class Bullet extends GameObject{
         bulletRectangle.y = y;
     }
 
-    public void collideWith(Tank tank) {
-        if(this.group == tank.getGroup()) return;
+    public boolean collideWith(Tank tank) {
+        if(this.group == tank.getGroup()) return false;
 
         // 如果两个长方形相交，说明子弹打中了
         if(bulletRectangle.intersects(tank.tankRectangle)){
@@ -91,7 +91,9 @@ public class Bullet extends GameObject{
             int eX = tank.getX() + Tank.WIDTH/2 - Explode.WIDTH/2;
             int eY = tank.getY() + Tank.HEIGHT/2 - Explode.HEIGHT/2;
             gameModel.add(new Explode(eX,eY,gameModel));
+            return true;
         }
+        return false;
     }
 
     private void die() {

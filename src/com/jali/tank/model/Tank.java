@@ -90,7 +90,7 @@ public class Tank extends GameObject{
                 y += SPEED;
                 break;
         }
-        if(group==Group.BAD && random.nextInt(100) > 95){
+        if(group==Group.BAD && random.nextInt(100) > 90){
             randomDir();
         }
         boundsCheck();
@@ -184,20 +184,6 @@ public class Tank extends GameObject{
     public void rebound(){
         this.x = beforeX;
         this.y = beforeY;
-//        switch (dir){
-//            case UP:
-//                this.dir = Dir.DOWN;
-//                break;
-//            case DOWN:
-//                this.dir = Dir.DOWN;
-//                break;
-//            case LEFT:
-//                this.dir = Dir.RIGHT;
-//                break;
-//            case RIGHT:
-//                this.dir = Dir.LEFT;
-//                break;
-//        }
     }
 
 }

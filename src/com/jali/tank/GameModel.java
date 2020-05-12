@@ -1,6 +1,7 @@
 package com.jali.tank;
 
 import com.jali.tank.cor.BulletTankCollider;
+import com.jali.tank.cor.ColliderChain;
 import com.jali.tank.cor.TankTankCollide;
 import com.jali.tank.model.GameObject;
 import com.jali.tank.model.Tank;
@@ -21,8 +22,7 @@ public class GameModel {
     Tank myTank = new Tank(250,400,Dir.UP, Group.GOOD, this);
 
     List<GameObject> objects = new ArrayList<>();
-    BulletTankCollider collider = new BulletTankCollider();
-    TankTankCollide tankTankCollide = new TankTankCollide();
+    ColliderChain chain = new ColliderChain();
 
     public GameModel() {
         // 初始化敌方坦克
@@ -70,8 +70,7 @@ public class GameModel {
             for (int j = i+1; j < objects.size(); j++) {
                 GameObject o1 = objects.get(i);
                 GameObject o2 = objects.get(j);
-                collider.collide(o1,o2);
-                tankTankCollide.collide(o1,o2);
+                chain.collide(o1,o2);
             }
         }
 

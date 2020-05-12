@@ -11,13 +11,17 @@ import com.jali.tank.model.Tank;
 public class BulletTankCollider implements Collider{
 
     @Override
-    public void collide(GameObject o1, GameObject o2) {
+    public boolean collide(GameObject o1, GameObject o2) {
         if(o1 instanceof Bullet && o2 instanceof Tank) {
             Bullet bulletObject = (Bullet) o1;
             Tank tankObject = (Tank) o2;
-            bulletObject.collideWith(tankObject);
+            // TODO 把 collideWith 方法的代码拷贝过来
+            if(bulletObject.collideWith(tankObject)){
+                return false;
+            };
         }else if(o1 instanceof Tank && o2 instanceof Bullet){
-            collide(o2, o1);
+            return collide(o2, o1);
         }
+        return true;
     }
 }
