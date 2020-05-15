@@ -13,7 +13,7 @@ public class TankTankCollide implements Collider{
         if(o1 instanceof Tank && o2 instanceof Tank) {
             Tank tank1 = (Tank) o1;
             Tank tank2 = (Tank) o2;
-            if (tank1.getTankRectangle().intersects(tank2.getTankRectangle())){
+            if (tank1.rect.intersects(tank2.rect)){
                 tank1.rebound();
                 tank2.rebound();
             }

@@ -15,7 +15,7 @@ import java.awt.event.WindowEvent;
 public class TankFrame extends Frame {
 
     public static final int GAME_WIDTH = 800,GAME_HEIGHT = 600;
-    GameModel gameModel = new GameModel();
+    Image offScreenImage = null;
 
     public TankFrame(){
         this.setVisible(true);
@@ -33,7 +33,7 @@ public class TankFrame extends Frame {
         });
     }
 
-    Image offScreenImage = null;
+
     @Override
     public void update(Graphics g) {
         if(offScreenImage == null) {
@@ -51,7 +51,7 @@ public class TankFrame extends Frame {
 
     @Override
     public void paint(Graphics g) {
-        gameModel.paint(g);
+        GameModel.getInstance().paint(g);
     }
 
     class MyKeyListenner extends KeyAdapter{
@@ -100,7 +100,7 @@ public class TankFrame extends Frame {
                     bD = false;
                     break;
                 case KeyEvent.VK_CONTROL:
-                    gameModel.getMyTank().fire();
+                    GameModel.getInstance().getMyTank().fire();
                     break;
                 default:
                     break;
@@ -109,9 +109,9 @@ public class TankFrame extends Frame {
         }
 
         private void setMainDir() {
-            Tank myTank = gameModel.getMyTank();
+            Tank myTank = GameModel.getInstance().getMyTank();
             if(!bL && !bR && !bU && !bD){
-                gameModel.getMyTank().setMoving(false);
+                myTank.setMoving(false);
             }else{
                 myTank.setMoving(true);
                 if(bL) myTank.setDir(Dir.LEFT);

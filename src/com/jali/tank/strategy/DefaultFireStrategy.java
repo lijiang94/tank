@@ -1,5 +1,6 @@
 package com.jali.tank.strategy;
 
+import com.jali.tank.GameModel;
 import com.jali.tank.model.Bullet;
 import com.jali.tank.model.Tank;
 
@@ -24,6 +25,6 @@ public class DefaultFireStrategy implements FireStrategy{
                 bY = tank.y + Tank.HEIGHT/2 - Bullet.HEIGHT/2 + 4;
                 break;
         }
-        tank.gameModel.add(new Bullet(bX,bY,tank.dir,tank.group,tank.gameModel));
+        new Bullet(bX,bY,tank.dir,tank.group);
     }
 }

@@ -14,12 +14,11 @@ import java.util.Random;
  */
 public class Tank extends GameObject{
 
-    Rectangle tankRectangle;
+    public Rectangle rect;
     private boolean living = true;
     public Dir dir;
     public static final int SPEED = 3;
     boolean moving = true;
-    public GameModel gameModel;
     private Random random = new Random();
     public Group group;
     FireStrategy fireStrategy;
@@ -27,14 +26,13 @@ public class Tank extends GameObject{
     public static final int WIDTH = ResourceManager.goodTankU.getWidth();
     public static final int HEIGHT = ResourceManager.goodTankU.getHeight();
 
-    public Tank(int x, int y, Dir dir, Group group, GameModel gameModel) {
+    public Tank(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.gameModel = gameModel;
         // 坦克的长方形
-        tankRectangle = new Rectangle(x, y ,WIDTH, HEIGHT);
+        rect = new Rectangle(x, y ,WIDTH, HEIGHT);
         if(group==Group.BAD){
             fireStrategy = new DefaultFireStrategy();
         }else{
@@ -45,7 +43,7 @@ public class Tank extends GameObject{
     @Override
     public void paint(Graphics g) {
         if(!this.living){
-            gameModel.remove(this);
+            GameModel.getInstance().remove(this);
             return;
         }
 
@@ -95,8 +93,8 @@ public class Tank extends GameObject{
         }
         boundsCheck();
 
-        tankRectangle.x = x;
-        tankRectangle.y = y;
+        rect.x = x;
+        rect.y = y;
     }
 
     /**
@@ -142,6 +140,8 @@ public class Tank extends GameObject{
     }
 
     public void fire() {
+        // 死了就不能打子弹了
+        if(!living) return;
         fireStrategy.fire(this);
     }
 
@@ -171,14 +171,6 @@ public class Tank extends GameObject{
 
     public void setGroup(Group group) {
         this.group = group;
-    }
-
-    public Rectangle getTankRectangle() {
-        return tankRectangle;
-    }
-
-    public void setTankRectangle(Rectangle tankRectangle) {
-        this.tankRectangle = tankRectangle;
     }
 
     public void rebound(){

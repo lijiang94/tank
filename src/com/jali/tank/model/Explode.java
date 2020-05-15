@@ -14,13 +14,12 @@ public class Explode extends GameObject{
     public static int WIDTH = ResourceManager.explodes[0].getWidth();
     public static int HEIGHT = ResourceManager.explodes[0].getHeight();
 
-    GameModel gameModel = null;
     private int step = 0;
 
-    public Explode(int x, int y, GameModel gameModel) {
+    public Explode(int x, int y) {
         this.x = x;
         this.y = y;
-        this.gameModel = gameModel;
+        GameModel.getInstance().add(this);
     }
 
     @Override
@@ -28,7 +27,7 @@ public class Explode extends GameObject{
         g.drawImage(ResourceManager.explodes[step++],x,y,null);
         if(step >= ResourceManager.explodes.length){
             step = 0;
-            gameModel.remove(this);
+            GameModel.getInstance().remove(this);
         }
     }
 

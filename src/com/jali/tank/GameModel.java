@@ -5,6 +5,7 @@ import com.jali.tank.cor.ColliderChain;
 import com.jali.tank.cor.TankTankCollide;
 import com.jali.tank.model.GameObject;
 import com.jali.tank.model.Tank;
+import com.jali.tank.model.Wall;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -19,20 +20,35 @@ import java.util.List;
 public class GameModel {
 
     // 我方坦克
-    Tank myTank = new Tank(250,400,Dir.UP, Group.GOOD, this);
+    Tank myTank;
 
+    private static GameModel INSTANCE = new GameModel();
     List<GameObject> objects = new ArrayList<>();
     ColliderChain chain = new ColliderChain();
 
-    public GameModel() {
+    static {
+        INSTANCE.init();
+    }
+
+    private void init() {
         // 初始化敌方坦克
         int initTankCount = Integer.parseInt(PropertyManager.get("initTankCount"));
-
         for (int i = 0; i < initTankCount; i++) {
-            objects.add(new Tank(i * 80,50,Dir.DOWN, Group.BAD ,this));
+            add(new Tank(i * 80,50,Dir.DOWN, Group.BAD));
         }
+        myTank = new Tank(250,400,Dir.UP, Group.GOOD);
+        add(myTank);
+        // 初始化墙
+        add(new Wall(150, 150, 200, 50));
+        add(new Wall(550, 150, 200, 50));
+        add(new Wall(300, 300, 50, 200));
+        add(new Wall(550, 300, 50, 200));
+    }
 
-        objects.add(myTank);
+    private GameModel() {}
+
+    public static GameModel getInstance(){
+        return INSTANCE;
     }
 
     /**
@@ -57,9 +73,6 @@ public class GameModel {
         g.setColor(Color.WHITE);
         g.setColor(color);
 
-        // 画我方坦克
-        myTank.paint(g);
-
         // 画去其他物体
         for (int i = 0; i < objects.size(); i++) {
             objects.get(i).paint(g);
@@ -73,6 +86,9 @@ public class GameModel {
                 chain.collide(o1,o2);
             }
         }
+
+        // 画我方坦克
+        myTank.paint(g);
 
     }
 
